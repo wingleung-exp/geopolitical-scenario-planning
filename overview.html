@@ -1,0 +1,275 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Geopolitical Tracker Overview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column (max 1040px); prose ~68ch; numbered step cards for the true sequence; charts sit directly under the idea they illustrate */
+:root{
+  --bg:#f5f6f4; --surface:#ffffff; --ink:#18212b; --muted:#5b6672; --rule:#dde1dd;
+  --track:#0f6e64; --ref:#7b8794; --kw:#b06a12; --cat:#a3a99f;
+  --pass:#1f7a4d; --weak:#9a6b06; --fail:#b3362c; --passbg:#e3f1e8; --weakbg:#f6eccf; --failbg:#f6e1de;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111618; --surface:#182024; --ink:#e4e8e6; --muted:#9aa5ad; --rule:#2a3439;
+  --track:#4fc2b2; --ref:#8d98a3; --kw:#e0a24a; --cat:#5d6662;
+  --pass:#6fd19a; --weak:#e5bd5c; --fail:#f08a7e; --passbg:#173126; --weakbg:#33290f; --failbg:#3a1d1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111618; --surface:#182024; --ink:#e4e8e6; --muted:#9aa5ad; --rule:#2a3439;
+  --track:#4fc2b2; --ref:#8d98a3; --kw:#e0a24a; --cat:#5d6662;
+  --pass:#6fd19a; --weak:#e5bd5c; --fail:#f08a7e; --passbg:#173126; --weakbg:#33290f; --failbg:#3a1d1a; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0;letter-spacing:.005em}
+h1{font-size:clamp(28px,4.4vw,40px);line-height:1.1}
+h2{font-size:24px;line-height:1.2}
+h3{font-size:17px}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--rule);padding-top:26px}
+header{display:flex;flex-direction:column;gap:12px}
+.lede{font-size:17px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.q{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.q b{font-family:var(--display);font-size:16px}
+.q span{color:var(--muted);font-size:14px}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:grid;grid-template-columns:44px 1fr;gap:14px;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:16px}
+.step .n{font-family:var(--display);font-size:28px;line-height:1;color:var(--track);font-weight:600}
+.step .body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.step .ex{font-size:14px;color:var(--muted);border-left:3px solid var(--rule);padding-left:10px}
+.step .ex b{color:var(--ink);font-weight:500}
+.side{border:1px dashed var(--muted);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;max-width:84ch}
+.chart{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 14px 8px;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:560px}
+.chart.small{max-width:640px}
+.chart.small svg{min-width:380px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);padding:2px 4px 8px}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.legend i.sq{height:10px;width:10px}
+.note{font-size:14px;color:var(--muted);max-width:84ch}
+.note b{color:var(--ink)}
+dl.gloss{display:grid;grid-template-columns:minmax(130px,190px) 1fr;gap:12px 18px;margin:0;max-width:90ch}
+dl.gloss dt{font-family:var(--display);font-weight:600;font-size:16px}
+dl.gloss dd{margin:0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.box{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.pass{background:var(--passbg);color:var(--pass)} .pill.weak{background:var(--weakbg);color:var(--weak)} .pill.fail{background:var(--failbg);color:var(--fail)}
+ol.asks{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;max-width:84ch}
+code{font-family:var(--mono);font-size:.9em;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:0 4px;word-break:break-all}
+svg text{font-family:var(--mono);fill:var(--muted)}
+@media (max-width:560px){dl.gloss{grid-template-columns:1fr}.step{grid-template-columns:1fr}}
+</style>
+</head><body>
+<nav class="hub" style="font:500 13px/1.4 ui-monospace,Menlo,monospace;padding:10px max(16px,env(safe-area-inset-left,0px));background:#f3f4f2;color:#333;border-bottom:1px solid #e2e4e8"><a href="index.html" style="color:#1f5f8b">← All meeting 3 pages</a></nav>
+
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Project overview · Meeting 3</div>
+  <h1>Geopolitical Tracker Overview</h1>
+  <p class="lede">A plain-language walkthrough: what the system is for, what it does each month step by step, and how we check that its output can be trusted.</p>
+  <div class="meta"><span>Coverage 2018-01 → 2026-11</span><span>165 logged changes</span><span>13 critical reviews</span><span>Paused 10 Nov 2026</span></div>
+</header>
+
+<section>
+  <div class="eyebrow">Part 1 · The end goal</div>
+  <h2>A monthly briefing a bank strategist can rely on</h2>
+  <p>Picture a strategist at a global bank. Every month they want to know three things without spending days reading the news:</p>
+  <div class="qs">
+    <div class="q"><b>What is happening?</b><span>Wars, sanctions, tariffs, elections and central-bank moves that could affect markets.</span></div>
+    <div class="q"><b>How did it change?</b><span>Is each story getting worse, staying the same, calming down, or over?</span></div>
+    <div class="q"><b>Who reacted?</b><span>Which governments imposed sanctions or tariffs; which central banks changed rates.</span></div>
+  </div>
+  <p>The system produces that answer automatically every 30 days: a short <b>monthly brief</b>, plus a <b>database</b> of every event, story and government action from 2018 to now. It does <b>not</b> predict prices. The brief is tracking, not forecasting.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Part 2 · What happens each month</div>
+  <h2>Six steps, followed through February 2022</h2>
+  <p>One command runs all six steps for a month: <code>python run_cycle.py 2022-02</code>. The grey lines show what each step produced for February 2022, the month Russia invaded Ukraine.</p>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div class="body"><h3>Collect the day's events</h3><p>Wikipedia's "Current Events Portal" lists each day's notable world events, one line each, written by volunteer editors. The system downloads every day's list.</p><div class="ex">Feb 2022: <b>543 events</b>, e.g. "Russia launches a full-scale invasion of Ukraine." Across 2018–2026: about 54,000.</div></div></div>
+    <div class="step"><div class="n">2</div><div class="body"><h3>Keep only what matters for markets</h3><p>The events go in batches to <b>Codex</b>, an AI language model similar to ChatGPT,. It scores each one from 0 (irrelevant) to 3 (very relevant) and says why. Only scores of 2 and 3 are kept.</p><div class="ex">A sports result scores 0. The invasion scores 3: "threatens commodity flows and cross-border investment".</div></div></div>
+    <div class="step"><div class="n">3</div><div class="body"><h3>Group events into storylines</h3><p>Dozens of related events become one storyline. Each storyline keeps the <b>same ID every month</b> so it can be followed over time. Matching this month's storylines to last month's is called <b>linking</b>.</p><div class="ex"><b>259</b> Ukraine-related events become one storyline, "Russia-Ukraine war", continuing January's storyline.</div></div></div>
+    <div class="step"><div class="n">4</div><div class="body"><h3>Decide how each storyline moved</h3><p>Codex compares last month's events with this month's and labels each storyline <b>escalating, steady, de-escalating or resolved</b>, with a one-line summary of what changed.</p><div class="ex">"Escalating. Tensions advanced to financial sanctions, Russian banks' SWIFT exclusion, Ukrainian capital controls, and a Russian emergency rate hike."</div></div></div>
+    <div class="step"><div class="n">5</div><div class="body"><h3>Collect government reactions</h3><p>Official sources are read directly: the US Federal Register (sanctions, tariffs, export bans), the EU and UK sanctions lists, and Fed, ECB and Bank of England decisions. Each action is matched to the storyline it responds to.</p><div class="ex">US sanctions on Russian banks are linked to "Russia-Ukraine war". The EU made <b>518</b> new sanctions designations that month, the most in two years.</div></div></div>
+    <div class="step"><div class="n">6</div><div class="body"><h3>Write the brief and save the data</h3><p>The most important storylines, how they moved, the reactions and the central-bank decisions go into a short report in the project's report style. Everything is also saved in a SQLite database.</p><div class="ex">File: <code>reports/brief_2022-02.md</code>. Point 1 is the Russia-Ukraine war; nine more storylines follow.</div></div></div>
+  </div>
+  <div class="side">
+    <h3>Side experiment A · Scenario probabilities (secondary)</h3>
+    <p>For a few storylines the system also writes 3–4 possible outcomes for next month with probabilities that add up to 100%, for example "ceasefire 25%, escalation 50%, stalemate 25%". It is kept as a secondary experiment. It was weak on past data; a fair live test is scored after 2 December.</p>
+  </div>
+  <div class="side">
+    <h3>Side experiment B · Where fine-tuning fits</h3>
+    <p><b>The main pipeline trains nothing.</b> Codex is used as it is, by giving it written instructions.</p>
+    <p>Fine-tuning was tried only to save cost. A small model on a local graphics card (RTX 4080) was trained to copy Codex's Step 2 scores from thousands of events Codex had already scored. If it matched Codex, Step 2 would be free and instant. It came close (0.82 against Codex's 0.91 on the same test) but not close enough, so it is <b>not used</b>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Part 3 · How we check the output</div>
+  <h2>The ideas you need to read the numbers</h2>
+  <p>There is no answer key for "what mattered this month", so the output is checked from several angles. These ideas come up in every check below.</p>
+  <dl class="gloss">
+    <dt>Labels</dt><dd>Events where the right answer was decided in advance, so the system's answer can be marked right or wrong. Ours were written by Claude, a different AI from Codex, so they are called <b>silver labels</b>: useful, but not yet checked by a person.</dd>
+    <dt>Held-out set</dt><dd>Labels never looked at while building the system, so a test on them is like a real exam. The <b>gold set</b> was looked at while writing Codex's instructions, so its score is flattering, like studying from the exam paper. "Codex held-out 0.91" means 0.91 on the 100-event real exam.</dd>
+    <dt>Precision · recall · F1</dt><dd><b>Precision</b>: of the events Codex kept, how many should have been kept? <b>Recall</b>: of the events that should have been kept, how many did Codex keep? <b>F1</b> combines both into one score from 0 (useless) to 1 (perfect). Example: 10 events truly matter; Codex keeps 10, of which 9 are right. Precision 9/10, recall 9/10, F1 0.9.</dd>
+    <dt>Baseline</dt><dd>A deliberately simple method to compare against. Here it is a <b>keyword count</b>: flag any event containing words like "sanctions", "missile" or "tariff". If Codex cannot beat it, Codex is not worth using.</dd>
+    <dt>Correlation</dt><dd>How much two series move together, from −1 to +1. Around 0.5 is a clear, solid relationship; 0 is none. We mostly correlate <b>month-to-month changes</b>: when the reference index jumps, does the tracker jump too?</dd>
+    <dt>GPR index</dt><dd>The Geopolitical Risk index, a respected measure built by economists from how much newspapers discuss wars and tensions each month. It is our outside reference for "how much conflict was there".</dd>
+    <dt>Pre-registration</dt><dd>Writing the test and its pass mark down <b>before</b> running it, so the result cannot be adjusted afterwards. The older periods (2017, 2018–19, 2020–22) were tested this way, with a pass mark of 0.3.</dd>
+    <dt>Look-ahead</dt><dd>When testing on the past, accidentally using information that did not exist yet. Wikipedia pages are edited later, so every period was re-run on pages as they looked the next day.</dd>
+    <dt>95% CI</dt><dd>The range the true value very probably lies in. "0.79 (0.68–0.88)" means the real score is very likely between 0.68 and 0.88. Small samples give wide ranges.</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="eyebrow">Check 1 · Step 2</div>
+  <h2>Does the filter keep the right events?</h2>
+  <p>Each bar is an F1 score on Claude's labels. Higher is better; 1.0 would be perfect.</p>
+  <div class="chart small"><svg id="c3" viewBox="0 0 480 250" role="img" aria-label="Bar chart of relevance F1 scores"></svg></div>
+  <p class="note">Keywords 0.40. The fine-tuned local model 0.82. Codex 0.91 on the held-out "real exam", and 0.79 when the flattering gold set is pooled in (95% CI 0.68–0.88). We report the cautious 0.79.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Check 2 · Steps 2–4 together</div>
+  <h2>Does the tracker follow real conflict risk?</h2>
+  <p>Teal is how much conflict the tracker recorded each month; grey is the GPR index. Each line is scaled to its own peak, so compare the shapes, not the heights.</p>
+  <div class="chart">
+    <div class="legend"><span><i style="background:var(--track)"></i>Tracker: conflict intensity</span><span><i style="background:var(--ref)"></i>GPR index (military conflict)</span></div>
+    <svg id="c1" viewBox="0 0 1000 300" role="img" aria-label="Line chart of tracker conflict intensity and the GPR index, 2018 to 2026"></svg>
+  </div>
+  <p class="note">Both jump at the Ukraine invasion, the Gaza war and the Iran war. If the tracker were collecting the wrong things, the lines would not line up like this.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Check 3 · Is the AI worth it?</div>
+  <h2>Codex against simple counting, period by period</h2>
+  <p>The same correlation test in each period: month-to-month changes against GPR. The red dashed line is the pass mark of 0.3, written down in advance.</p>
+  <div class="chart">
+    <div class="legend"><span><i class="sq" style="background:var(--track)"></i>Codex tracker</span><span><i class="sq" style="background:var(--kw)"></i>Keyword count</span><span><i class="sq" style="background:var(--cat)"></i>Wikipedia "Armed conflicts" count</span><span><i style="background:var(--fail)"></i>Pass mark 0.3</span></div>
+    <svg id="c2" viewBox="0 0 1000 300" role="img" aria-label="Grouped bar chart of correlations by period"></svg>
+  </div>
+  <p class="note">Codex passes in every period from 2018 and fails in 2017 (0.26). In most periods the keyword count is close behind. <b>Takeaway:</b> for the monthly total, simple counting does nearly as well. Codex earns its place through the named, linked storylines and their movement, which counting cannot produce.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Check 4 · Is the past test fair?</div>
+  <h2>No peeking at the future</h2>
+  <p>Wikipedia pages get edited after the event. If those later edits were helping, results from "next-day" pages would be worse. The rule, written in advance: the difference must stay within 0.10.</p>
+  <div class="chart small"><svg id="c4" viewBox="0 0 480 250" role="img" aria-label="Bar chart comparing today's and next-day pages"></svg></div>
+  <p class="note">The difference was +0.06 and −0.04, so later edits are not inflating results. What this cannot test is whether Codex simply remembers history from its training. Only the live test can rule that out.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Check 5 · Step 5</div>
+  <h2>Do government reactions line up?</h2>
+  <p>Bars: significant US tariff and trade-investigation actions each month. Line: the Caldara trade-policy uncertainty index, an outside measure.</p>
+  <div class="chart">
+    <div class="legend"><span><i class="sq" style="background:var(--track)"></i>US tariff and trade actions</span><span><i style="background:var(--ref)"></i>Trade-policy uncertainty</span></div>
+    <svg id="c5" viewBox="0 0 1000 280" role="img" aria-label="Bars of monthly trade actions with an uncertainty line"></svg>
+  </div>
+  <p class="note">The 2018–19 trade war and the 2025 tariff wave appear in both. Correlation within each period: 0.42.</p>
+</section>
+
+<section>
+  <div class="eyebrow">All checks</div>
+  <h2>Every check in plain words</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Step</th><th>Plain question</th><th>Result</th><th>Verdict</th><th>Why it might be off</th></tr></thead>
+    <tbody>
+      <tr><td>2</td><td>Does the filter keep the right events?</td><td class="num">F1 0.79 (keywords 0.40)</td><td><span class="pill pass">good</span></td><td>Labels made by an AI</td></tr>
+      <tr><td>3</td><td>Does a story keep the same ID next month?</td><td class="num">95% right (60 pairs)</td><td><span class="pill pass">good</span></td><td>Small sample</td></tr>
+      <tr><td>4</td><td>Is "escalating" or "easing" right?</td><td class="num">19 of 20</td><td><span class="pill weak">likely too high</span></td><td>The checker saw the answer first</td></tr>
+      <tr><td>2–3</td><td>Do famous events show up at all?</td><td class="num">92% of months</td><td><span class="pill pass">good</span></td><td>Measures presence, not quality</td></tr>
+      <tr><td>2–3</td><td>Does it track the risks experts named (Eurasia Group)?</td><td class="num">8/9 (2025), 7/9 (2026)</td><td><span class="pill pass">good</span></td><td>Judged by Codex</td></tr>
+      <tr><td>2–3</td><td>On the 20 biggest market days, does it hold the cause?</td><td class="num">16 yes, 2 partly, 2 no</td><td><span class="pill pass">good</span></td><td>The judge knows the period</td></tr>
+      <tr><td>2–4</td><td>Does conflict activity move with the GPR index?</td><td class="num">0.46–0.62; 0.26 in 2017</td><td><span class="pill weak">mixed</span></td><td>Keyword counting comes close</td></tr>
+      <tr><td>1</td><td>Does it cheat with later Wikipedia edits?</td><td class="num">change ≤ 0.06</td><td><span class="pill pass">good</span></td><td>Codex's own memory untestable</td></tr>
+      <tr><td>5</td><td>Are reactions matched to the right story?</td><td class="num">60% matched; 27/30 correct</td><td><span class="pill pass">good</span></td><td>About 10% repeat errors</td></tr>
+      <tr><td>1–2</td><td>Does it match overall global news volume (GDELT)?</td><td class="num">trade only</td><td><span class="pill fail">no</span></td><td>It is a curated view, not a news counter</td></tr>
+      <tr><td>All</td><td>Do extra "critic" AI agents help?</td><td class="num">no gain</td><td><span class="pill fail">no</span></td><td>One agent is enough</td></tr>
+      <tr><td>Side A</td><td>Are next-month probabilities better than guessing evenly?</td><td class="num">small skill (0.17 → 0.07)</td><td><span class="pill weak">weak</span></td><td>Live test after 2 Dec</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">Bottom line</div>
+  <h2>What is shown, and what is not yet</h2>
+  <div class="two">
+    <div class="box"><h3>Shown</h3><p>The system reliably finds and organises the month's important developments, follows an established risk index, matches most government reactions to the right story, and does not benefit from later Wikipedia edits.</p></div>
+    <div class="box"><h3>Not yet shown</h3><p>That the AI beats simple keyword counting on the overall amount of conflict. Also, every check so far was marked by an AI. Human checks would give the first human-verified numbers.</p></div>
+  </div>
+</section>
+
+
+</div>
+
+<script>
+const D = {"conflict": {"m": ["2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"], "tracker": [11.0, 8.3, 8.0, 24.3, 3.7, 0.7, 2.7, 0.0, 3.3, 0.0, 7.0, 1.3, 6.0, 5.7, 0.7, 0.7, 5.0, 17.7, 5.7, 10.7, 10.0, 41.0, 0.0, 10.7, 21.0, 36.0, 14.7, 1.0, 3.0, 5.7, 5.0, 6.7, 15.3, 24.7, 10.0, 0.0, 0.0, 2.7, 5.7, 10.3, 28.7, 4.7, 16.3, 36.3, 4.7, 0.0, 7.0, 6.0, 17.0, 171.0, 176.3, 103.3, 59.0, 59.7, 53.0, 45.0, 66.7, 58.7, 20.7, 3.3, 22.0, 7.3, 21.3, 22.0, 22.0, 29.7, 53.3, 58.7, 28.7, 259.0, 107.3, 59.3, 54.7, 47.7, 37.0, 47.0, 103.3, 55.3, 74.3, 187.0, 93.3, 125.7, 71.3, 59.0, 54.0, 40.7, 80.3, 38.3, 35.3, 72.7, 31.7, 42.0, 76.7, 80.3, 55.7, 22.3, 29.3, 51.3, 288.7, 232.3, 164.3, 135.7, 195.0, 84.0, 67.0, 76.0], "gpr": [14.7, 19.2, 16.0, 35.4, 15.3, 10.3, 8.5, 15.1, 11.4, 6.6, 14.7, 18.0, 9.2, 11.0, 14.3, 8.8, 12.9, 17.5, 10.4, 12.4, 16.0, 38.6, 10.2, 11.2, 67.7, 16.6, 11.2, 4.6, 8.6, 6.2, 5.4, 3.8, 8.0, 10.0, 9.9, 6.9, 4.7, 6.0, 9.3, 15.7, 38.3, 11.3, 12.9, 46.5, 16.8, 6.2, 8.8, 16.4, 27.5, 111.0, 235.8, 143.8, 86.5, 77.1, 62.9, 73.2, 68.6, 71.9, 61.9, 68.6, 61.2, 77.6, 55.5, 42.1, 52.1, 45.9, 50.3, 42.5, 44.6, 175.9, 135.3, 104.5, 98.2, 95.0, 67.2, 104.2, 92.2, 64.8, 55.0, 78.9, 83.0, 106.5, 68.9, 59.5, 59.8, 48.5, 57.9, 47.5, 62.5, 118.2, 61.8, 60.9, 64.0, 71.5, 38.1, 60.9, 67.8, 50.3, 220.1, 146.5, 103.6, 99.0, 105.8, 69.9, 88.3, 79.9]}, "trade": {"m": ["2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"], "actions": [2, 0, 2, 3, 2, 3, 2, 4, 1, 1, 1, 1, 1, 0, 1, 1, 5, 1, 2, 2, 1, 3, 1, 3, 3, 1, 0, 1, 2, 3, 1, 2, 1, 3, 2, 2, 9, 1, 7, 0, 0, 6, 2, 0, 2, 1, 2, 2, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 2, 1, 2, 1, 2, 0, 0, 3, 1, 8, 7, 14, 4, 3, 3, 8, 6, 5, 0, 3, 2, 4, 2, 2, 3, 5, 8, 4, 3, 2], "tpu": [73.2, 57.0, 260.6, 174.2, 152.2, 228.6, 246.4, 225.8, 150.1, 155.2, 144.8, 164.6, 141.7, 127.5, 94.1, 91.2, 189.8, 266.0, 145.1, 254.2, 136.9, 139.3, 119.8, 146.3, 139.6, 95.7, 61.2, 55.5, 66.5, 59.9, 57.4, 67.2, 67.8, 70.2, 69.9, 98.0, 75.4, 36.9, 46.8, 48.0, 49.3, 49.3, 57.2, 39.5, 51.5, 56.1, 48.5, 37.1, 46.6, 54.3, 53.6, 41.2, 63.3, 74.5, 67.0, 65.9, 48.5, 46.6, 49.3, 48.8, 52.7, 43.7, 65.4, 33.9, 59.7, 52.3, 63.3, 60.0, 63.6, 44.5, 40.9, 65.3, 69.6, 62.6, 82.2, 91.0, 94.5, 89.1, 101.4, 98.1, 128.6, 147.9, 373.3, 247.7, 360.9, 469.8, 603.1, 1151.4, 723.1, 472.5, 554.9, 575.8, 465.3, 426.2, 342.8, 308.3, 410.8, 384.0, 269.1, 197.3, 200.0, 187.3, 194.9, 210.0, 260.8, 217.9]}};
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent.appendChild(e);return e}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function lineChart(id,months,series,opts){
+  const svg=document.getElementById(id); svg.innerHTML="";
+  const W=1000,H=opts.h||300,L=46,R=14,T=14,B=34, n=months.length;
+  const x=i=>L+(W-L-R)*i/(n-1), y=v=>T+(H-T-B)*(1-v);
+  for(const t of [0,0.25,0.5,0.75,1]){el("line",{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:css("--rule"),"stroke-width":1},svg);el("text",{x:L-8,y:y(t)+4,"text-anchor":"end","font-size":11},svg,Math.round(t*100)+"%")}
+  months.forEach((m,i)=>{if(m.endsWith("-01")){el("line",{x1:x(i),x2:x(i),y1:H-B,y2:H-B+5,stroke:css("--muted")},svg);el("text",{x:x(i),y:H-B+19,"text-anchor":"middle","font-size":11},svg,m.slice(0,4))}});
+  if(opts.bars){const s=opts.bars,mx=Math.max(...s.v),bw=(W-L-R)/n*0.7;s.v.forEach((v,i)=>{const h=(H-T-B)*v/mx;el("rect",{x:x(i)-bw/2,y:H-B-h,width:bw,height:h,fill:css(s.color),opacity:0.85},svg)})}
+  for(const s of series){const mx=Math.max(...s.v);const d=s.v.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v/mx).toFixed(1)).join(" ");el("path",{d,fill:"none",stroke:css(s.color),"stroke-width":s.w||2,"stroke-linejoin":"round"},svg)}
+  for(const a of (opts.notes||[])){const i=months.indexOf(a.m);if(i<0)continue;el("line",{x1:x(i),x2:x(i),y1:T+4,y2:H-B,stroke:css("--muted"),"stroke-dasharray":"3 4","stroke-width":1},svg);el("text",{x:x(i)+(a.left?-5:5),y:T+14,"text-anchor":a.left?"end":"start","font-size":11},svg,a.t)}
+  el("line",{x1:L,x2:W-R,y1:H-B,y2:H-B,stroke:css("--muted")},svg);
+}
+function barChart(id,groups,keys,colors,opts){
+  const svg=document.getElementById(id); svg.innerHTML="";
+  const [W,H]=svg.getAttribute("viewBox").split(" ").slice(2).map(Number);
+  const L=40,R=10,T=22,B=40,max=opts.max||1;
+  const y=v=>T+(H-T-B)*(1-v/max);
+  for(const t of opts.ticks){el("line",{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:css("--rule")},svg);el("text",{x:L-6,y:y(t)+4,"text-anchor":"end","font-size":11},svg,t.toFixed(1))}
+  const gw=(W-L-R)/groups.length, bw=Math.min(46,gw*0.8/keys.length);
+  groups.forEach((g,gi)=>{const cx=L+gw*gi+gw/2;keys.forEach((k,ki)=>{const v=g[k];const bx=cx-(keys.length*bw)/2+ki*bw;const yy=y(Math.max(v,0));
+    el("rect",{x:bx+2,y:yy,width:bw-4,height:Math.max(1,y(0)-yy),fill:css((g.colors||colors)[ki])},svg);
+    el("text",{x:bx+bw/2,y:yy-5,"text-anchor":"middle","font-size":11,style:"fill:var(--ink)"},svg,v.toFixed(2))});
+    el("text",{x:cx,y:H-B+18,"text-anchor":"middle","font-size":12,style:"fill:var(--ink)"},svg,g.label);
+    if(g.sub)el("text",{x:cx,y:H-B+33,"text-anchor":"middle","font-size":10.5},svg,g.sub)});
+  if(opts.line!=null){el("line",{x1:L,x2:W-R,y1:y(opts.line),y2:y(opts.line),stroke:css("--fail"),"stroke-width":1.5,"stroke-dasharray":"6 4"},svg)}
+  if(opts.caption)el("text",{x:W-R,y:12,"text-anchor":"end","font-size":11},svg,opts.caption);
+  el("line",{x1:L,x2:W-R,y1:y(0),y2:y(0),stroke:css("--muted")},svg);
+}
+function draw(){
+  lineChart("c1",D.conflict.m,[{v:D.conflict.gpr,color:"--ref",w:2},{v:D.conflict.tracker,color:"--track",w:2.2}],
+    {notes:[{m:"2022-02",t:"Ukraine invasion"},{m:"2023-10",t:"Gaza war"},{m:"2026-03",t:"Iran war",left:true}]});
+  barChart("c2",[
+    {label:"2017",sub:"n=11 · fail",codex:0.26,kw:0.40,cat:0.21},
+    {label:"2018–19",sub:"n=23",codex:0.55,kw:0.53,cat:0.37},
+    {label:"2020–22",sub:"n=33",codex:0.59,kw:0.60,cat:0.58},
+    {label:"2022-11–24",sub:"n=25",codex:0.46,kw:0.24,cat:0.10},
+    {label:"2025–26",sub:"n=21",codex:0.62,kw:0.44,cat:0.44}],
+    ["codex","kw","cat"],["--track","--kw","--cat"],{max:0.8,ticks:[0,0.2,0.4,0.6,0.8],line:0.3});
+  barChart("c3",[{label:"Keywords",v:0.40,colors:["--kw"]},{label:"Local model",v:0.82,colors:["--cat"]},{label:"Codex pooled",v:0.79},{label:"Codex held-out",v:0.91}],
+    ["v"],["--track"],{max:1,ticks:[0,0.5,1]});
+  barChart("c4",[{label:"2018–19",cur:0.55,asof:0.61},{label:"2020–22",cur:0.59,asof:0.55}],["cur","asof"],["--ref","--track"],
+    {max:0.8,ticks:[0,0.4,0.8],caption:"grey = today's pages · teal = next-day pages"});
+  lineChart("c5",D.trade.m,[{v:D.trade.tpu,color:"--ref",w:2}],{h:280,bars:{v:D.trade.actions,color:"--track"},
+    notes:[{m:"2018-07",t:"US–China tariffs"},{m:"2025-04",t:"2025 tariff wave",left:true}]});
+}
+draw();
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw)}catch(e){}
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+</script>
+
+</body></html>

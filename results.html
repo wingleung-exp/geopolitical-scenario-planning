@@ -1,0 +1,165 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>US–China Scenario Pipelines</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (briefing memo) with full-width figure plates; findings first, method after. */
+:root{
+  --bg:#f6f5f1; --paper:#ffffff; --ink:#16181d; --ink2:#4b4f58; --rule:#dcd9d0;
+  --accent:#1f5f8b; --good:#0f7a52; --warn:#9a5b00; --bad:#a3352f; --chip:#eceae3;
+  --plate:#ffffff;
+  --f-display:"IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14161a; --paper:#1c1f24; --ink:#eceae4; --ink2:#a9adb6; --rule:#33373f;
+  --accent:#7db4dc; --good:#5cc79b; --warn:#e0a54a; --bad:#e58a83; --chip:#262a31; --plate:#f4f3ef; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14161a; --paper:#1c1f24; --ink:#eceae4; --ink2:#a9adb6; --rule:#33373f;
+  --accent:#7db4dc; --good:#5cc79b; --warn:#e0a54a; --bad:#e58a83; --chip:#262a31; --plate:#f4f3ef; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.meta{font:500 12px/1.4 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);display:flex;flex-wrap:wrap;gap:6px 18px}
+h1{font:600 clamp(28px,5vw,40px)/1.15 var(--f-display);margin:14px 0 12px;text-wrap:balance}
+h2{font:600 24px/1.25 var(--f-display);margin:0 0 10px;text-wrap:balance}
+h3{font:600 16px/1.3 var(--f-body);margin:18px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lede{font-size:18px;color:var(--ink2);max-width:62ch}
+section{border-top:1px solid var(--rule);padding-top:28px;margin-top:36px}
+.status{display:inline-flex;align-items:center;gap:8px;font:500 13px var(--f-mono);background:var(--chip);border-radius:999px;padding:4px 12px;color:var(--ink2)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block}
+.findings{display:grid;gap:12px;margin-top:22px}
+.finding{display:grid;grid-template-columns:auto 1fr;gap:14px;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.finding .tag{font:600 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:6px;height:fit-content;white-space:nowrap}
+.tag.bad{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.tag.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.tag.good{color:var(--good);background:color-mix(in srgb,var(--good) 13%,transparent)}
+.finding p{margin:0}
+.finding b{font-weight:600}
+figure{margin:18px 0 6px}
+.plate{background:var(--plate);border:1px solid var(--rule);border-radius:10px;padding:10px;overflow-x:auto}
+.plate img{display:block;width:100%;height:auto;min-width:560px}
+figcaption{font-size:13.5px;color:var(--ink2);margin-top:8px;max-width:70ch}
+.tbl{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 12px var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+code,.mono{font-family:var(--f-mono);font-size:.92em}
+.code{background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;overflow-x:auto;font:13px/1.55 var(--f-mono);white-space:pre}
+ul{padding-left:20px;margin:6px 0 12px}
+li{margin:4px 0;max-width:66ch}
+.foot{color:var(--ink2);font-size:13px;margin-top:40px}
+</style>
+</head><body>
+<nav class="hub" style="font:500 13px/1.4 ui-monospace,Menlo,monospace;padding:10px max(16px,env(safe-area-inset-left,0px));background:#f3f4f2;color:#333;border-bottom:1px solid #e2e4e8"><a href="index.html" style="color:#1f5f8b">← All meeting 3 pages</a></nav>
+
+
+<div class="wrap">
+  <div class="meta"><span>Meeting 3 · detailed results</span><span>Attempt F</span><span>Updated 11 Nov 2026, 06:10 PST</span></div>
+  <h1>Can an AI agent write useful US–China AI scenarios?</h1>
+  <p class="lede">We tested five ways of asking the same model (Codex) for 4 scenarios with probabilities after a US–China technology shock, then checked the scenarios against what actually happened.</p>
+  <span class="status"><i></i>Detailed log of the scenario experiments. The broad 29-storyline test and the summary are on the "Jensen Huang question" page.</span>
+
+  <div class="findings">
+    <div class="finding"><span class="tag bad">Leak found</span><p><b>The model was searching the live web.</b> Codex CLI looks things up online by default, through two separate tools. Both are now switched off for every call in the project. A re-check showed the tracker's results were not affected (top-5 storylines identical, 91.5% overlap overall, within normal run-to-run noise).</p></div>
+    <div class="finding"><span class="tag warn">Memory</span><p><b>Even offline, the model remembers events up to about May 2026.</b> Hiding names and dates does not stop it recognising earlier cases. A fair test needs events from June 2026 onward.</p></div>
+    <div class="finding"><span class="tag warn">Result</span><p><b>On the 7 fair cases, no pipeline clearly beat an even 25% spread.</b> With 3 runs per case, one difference is clear: past cases <i>chosen</i> from our database (P2) did worse than randomly chosen ones (P2r) in all 7 cases. On the broader 29-storyline test this gap disappeared (0.66 vs 0.65), so it was a small-sample effect.</p></div>
+    <div class="finding"><span class="tag warn">Bias</span><p><b>After US–China shocks, all pipelines over-predict escalation.</b> They put 45–58% on escalation scenarios, but escalation happened in only 20% of cases. Across 29 broader storylines the balance was about right. Mostly, nothing much changed within 30 days. The stakeholder agents were the least biased.</p></div>
+    <div class="finding"><span class="tag good">Live</span><p><b>Scenarios for the Jensen Huang question are frozen</b> (Jensen Huang investigation + midterms). All five pipelines put targeted US tightening first, at 30–40%. They will be scored after 7 Feb 2027.</p></div>
+  </div>
+
+  <section>
+    <h2>Five pipelines, one model</h2>
+    <p>Every pipeline uses the same model and must give the same output: 4 mutually exclusive scenarios whose probabilities add up to 100%, each with a checkable test and early-warning signs. Only the input changes.</p>
+    <figure><div class="plate"><img src="figs/f1_pipelines.png" alt="Diagram of five pipelines: P0 plain prompt, P1 self-recalled examples, P2 database retrieval, P2r random database cases, P3 database plus five stakeholder agents, all feeding a scenario writer and a judge"></div>
+      <figcaption>P3 runs one agent each for the US executive, Congress, the Chinese government, the technology industry and US allies, then a final agent combines their views. P2 picks 5 past months from our SQL database (Codex chooses among SQL candidates) and pulls what followed each. All of that is dated before the case.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>Why most historical cases are not a fair test</h2>
+    <p>We hid company names, people and dates, then asked the model which event it was. With web search on, it named 15 of 16 cases. With search off it still named every case up to January 2026, from memory.</p>
+    <figure><div class="plate"><img src="figs/f6_cutoff.png" alt="Line chart: the model dates hidden-date news correctly 60 to 100 percent of the time up to May 2026, then 20 percent in June and 0 percent from July 2026"></div>
+      <figcaption>Ten random news items per month, dates hidden, mixed across months in each batch. The model dates events correctly up to about May 2026, even when it says it does not know them. Only the shaded window is clean.</figcaption></figure>
+    <figure><div class="plate"><img src="figs/f4_masking.png" alt="Table of the 16 cases showing whether each masked case was recognised with search on, with search off, and with database context"></div>
+      <figcaption>Masking check by case. Only the June and July 2026 cases escape the model's memory, and only with search off.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>The fair test: seven events after the model's memory ends</h2>
+    <p>These are every US–China technology, trade or AI event in our database from June to September 2026. Each was scored on a 30-day horizon. The case list was written into the plan before any pipeline ran on it.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Case</th><th>Date</th><th>Event</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">N01</td><td class="num">2026-06-05</td><td>US proposes a managed-trade mechanism with China</td></tr>
+        <tr><td class="mono">N02</td><td class="num">2026-06-22</td><td>China's export controls on 10 US companies</td></tr>
+        <tr><td class="mono">N03</td><td class="num">2026-06-29</td><td>China blacklists 20 Japanese organisations (dual-use)</td></tr>
+        <tr><td class="mono">N04</td><td class="num">2026-07-02</td><td>Supermicro staff detained in Taiwan (Nvidia servers to China)</td></tr>
+        <tr><td class="mono">N05</td><td class="num">2026-07-28</td><td>Nvidia employee detained in Taiwan over chip smuggling</td></tr>
+        <tr><td class="mono">N06</td><td class="num">2026-09-15</td><td>China's exit bans for export-control violators</td></tr>
+        <tr><td class="mono">N07</td><td class="num">2026-09-25</td><td>US–China deal: tariff cuts and an AI dialogue</td></tr>
+      </tbody></table></div>
+    <figure><div class="plate"><img src="figs/f7_clean.png" alt="Bar chart of mean Brier score by pipeline on the clean cases: P0 0.73, P1 0.69, P2 0.79, P2r 0.64, P3 0.82, against an equal-guess reference of 0.75"></div>
+      <figcaption>Lower is better. Spreading probability evenly scores 0.75. Each dot is one case, averaged over 3 runs. Runs where the judge could not decide are left out, so P0 and P1 have n = 6.</figcaption></figure>
+    <div class="tbl"><table>
+      <thead><tr><th>Pipeline</th><th>Mean Brier</th><th>95% CI</th><th>Cases</th><th>Reading</th></tr></thead>
+      <tbody>
+        <tr><td>P0 Plain prompt</td><td class="num">0.71</td><td class="num">0.64–0.77</td><td class="num">6</td><td>Slightly better than an even spread</td></tr>
+        <tr><td>P1 Self-recalled examples</td><td class="num">0.76</td><td class="num">0.71–0.81</td><td class="num">6</td><td>No gain over P0 (+0.07, not significant)</td></tr>
+        <tr><td>P2 Our database</td><td class="num">0.80</td><td class="num">0.69–0.92</td><td class="num">7</td><td>Worse than P0 in 5 of 6 cases (+0.08, not significant); worse than random analogues in 7 of 7 (+0.12, CI +0.06 to +0.18)</td></tr>
+        <tr class="hl"><td>P2r Random database cases</td><td class="num">0.68</td><td class="num">0.55–0.80</td><td class="num">7</td><td>Best mean</td></tr>
+        <tr><td>P3 Stakeholder agents</td><td class="num">0.70</td><td class="num">0.57–0.84</td><td class="num">7</td><td>Better than P2 in 6 of 7 cases (−0.09, not significant); about equal to P0</td></tr>
+      </tbody></table></div>
+    <h3>How to read the ranking</h3>
+    <p>Lowest score is best, so on these 7 cases <b>P2r (random past cases from our database) ranks first</b>, then P3 (stakeholder agents), then P0 (plain prompt). The gaps between them are small, though:</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Comparison</th><th>Difference</th><th>95% CI</th><th>Better in</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>P2r vs P3</td><td class="num">−0.03</td><td class="num">−0.14 to +0.11</td><td class="num">5 of 7</td><td>Too close to call</td></tr>
+        <tr><td>P2r vs P0</td><td class="num">−0.04</td><td class="num">−0.14 to +0.09</td><td class="num">4 of 6</td><td>Too close to call</td></tr>
+        <tr class="hl"><td>P2r vs P2</td><td class="num">−0.12</td><td class="num">−0.18 to −0.06</td><td class="num">7 of 7</td><td>Clear: random beats chosen analogues</td></tr>
+      </tbody></table></div>
+    <p>So the supported conclusion is narrower than "P2r is the best pipeline". Giving the model background from our database helps a little or not at all, and <b>choosing "similar" past cases makes the scenarios worse</b>. With only 7 cases, P2r, P3 and P0 cannot be separated yet. The 29-storyline test below is meant to settle this.</p>
+    <p>The judge could not decide in 23 of 105 runs, because 30 days of Wikipedia and Federal Register records are thin. Scenarios written with chosen database analogues (P2) were almost always decidable (1 of 21 unclear), against 7 of 21 for P0. They are more concrete and easier to check, but more often wrong.</p>
+  </section>
+
+  <section>
+    <h2>After US–China shocks, every pipeline over-predicts escalation</h2>
+    <p>We tagged each scenario as escalation, status quo or de-escalation, then compared with what happened. Across the 7 clean US–China cases (105 runs), the judged outcome was <b>"status quo" 79% of the time and escalation only 20%</b>. Yet every pipeline put about half its probability on escalation.</p>
+    <figure><div class="plate"><img src="figs/f9_bias.png" alt="Bar chart: probability put on escalation scenarios by pipeline, P0 55%, P1 58%, P2 57%, P2r 54%, P3 45%, against escalation actually happening in 20% of judged runs"></div>
+      <figcaption>The red dashed line is how often escalation actually happened. The stakeholder agents (P3) are the least over-dramatic at 45%, but still more than twice the observed rate.</figcaption></figure>
+    <p>This is a calibration problem, not a retrieval problem. P2 is no more escalation-prone than the plain prompt. The model treats a shock as the start of a spiral, while in 30 days things mostly stay where they are. The next variant to test gives the model the historical base rate, for example "in past 30-day windows after similar shocks, the status quo held in about 4 of 5 cases".</p>
+  </section>
+
+  <section>
+    <h2>The Jensen Huang question, frozen on 11 November</h2>
+    <p>Case: NVIDIA opens an investigation into its CEO after US intelligence reported that a close associate was a Chinese spy (8 Nov), shortly after midterms in which Democrats were projected to win both chambers. The scenarios cover the next 90 days.</p>
+    <figure><div class="plate"><img src="figs/f5_live.png" alt="Five panels of horizontal bars, one per pipeline, listing four scenarios with probabilities; every pipeline's top scenario is targeted US tightening at 35 to 40 percent"></div>
+      <figcaption>Fingerprint (sha256) <span class="mono">477da693…a59c</span>, recorded in <span class="mono">reports/F/live_L01.sha256</span>. These scenarios will not be edited. They will be scored with the same judge after 7 Feb 2027.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>Pre-cutoff cases, for reference only</h2>
+    <p>Fifteen US–China technology shocks from 2018 to 2026, from the ZTE ban to the Nvidia smuggling arrests. The model remembers most of them, so good scores here mostly show recall. Database retrieval looks helpful here (P2 0.56–0.58 against P0 0.70–0.73), the opposite of the clean result. That is what memory contamination looks like.</p>
+    <figure><div class="plate"><img src="figs/f2_brier.png" alt="Grouped bars of mean Brier by pipeline for open and masked conditions on pre-cutoff cases"></div>
+      <figcaption>All 150 runs done. With names hidden, P2 scores 0.56 against 0.70 for P0, but these events are in the model's memory, so this is not evidence of skill.</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>How the model is configured now</h2>
+    <div class="code">codex exec --skip-git-repo-check -c model_reasoning_effort=medium
+           -c web_search="disabled" -c features.apps=false
+           --output-last-message out.txt -</div>
+    <p>Checks: the model reports no search tool; a shell request to Wikipedia fails inside its sandbox; earlier cached answers are never reused (new cache key). Model: <span class="mono">gpt-6.1-sol</span> via the user's Codex subscription.</p>
+  </section>
+
+  
+
+  <p class="foot">Protocols are frozen in docs/PLAN.md, sections IIIs and IIIs-b. Changes are logged in docs/CHANGELOG.md, C166–C178. All data is public: Wikipedia Current Events, US Federal Register, EU/UK sanctions lists, central-bank releases.</p>
+</div>
+
+</body></html>

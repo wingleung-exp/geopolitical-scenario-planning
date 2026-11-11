@@ -1,0 +1,230 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Can We Trust the Tracker?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one idea per "screen". Eyebrow = the question, headline = the answer (assertion-evidence), one chart, one takeaway.
+   Deliberately single light theme: the page is screen-shared and printed to PDF, so it must look identical everywhere. */
+:root{
+  color-scheme: light;
+  --bg:#ffffff; --panel:#f6f7f5; --ink:#141b22; --muted:#5a6570; --rule:#e1e4e0;
+  --track:#0f6e64; --ref:#8a95a1; --kw:#c27a14; --cat:#b9beb5; --accent:#0f6e64;
+  --good:#1f7a4d; --goodbg:#e3f1e8; --mid:#946500; --midbg:#f7eed3; --bad:#b3362c; --badbg:#f7e2de;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 64px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:64px}
+h1,h2{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.003em}
+h1{font-size:clamp(34px,5vw,52px);line-height:1.05}
+h2{font-size:clamp(24px,3.2vw,32px);line-height:1.15;max-width:30ch}
+p{margin:0;max-width:70ch}
+.q{font-family:var(--mono);font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:500}
+section{display:flex;flex-direction:column;gap:16px}
+.lede{font-size:19px;color:var(--muted);max-width:60ch}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-top:8px}
+.ans{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;border:1px solid var(--rule);border-radius:8px;padding:12px 14px}
+.ans .k{font-family:var(--display);font-weight:600;font-size:15px}
+.ans .v{color:var(--muted);font-size:14.5px}
+.pill{font-family:var(--mono);font-size:11.5px;padding:3px 8px;border-radius:999px;white-space:nowrap;height:fit-content}
+.pill.good{background:var(--goodbg);color:var(--good)} .pill.mid{background:var(--midbg);color:var(--mid)} .pill.bad{background:var(--badbg);color:var(--bad)}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.st{background:var(--panel);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.st .n{font-family:var(--display);font-weight:600;font-size:22px;color:var(--accent);line-height:1}
+.st b{font-family:var(--display);font-size:17px;font-weight:600}
+.st span{font-size:14px;color:var(--muted)}
+.st i{font-style:normal;font-size:13.5px;border-left:3px solid var(--accent);padding-left:8px;color:var(--ink)}
+.chart{border:1px solid var(--rule);border-radius:8px;padding:14px 14px 8px;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:560px}
+.chart.small{max-width:620px}
+.chart.small svg{min-width:400px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px;color:var(--muted);padding:0 4px 8px}
+.legend i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:7px;border-radius:2px}
+.legend i.sq{height:11px;width:11px}
+.take{font-size:17px;max-width:68ch}
+.take b{font-weight:600}
+.how{font-size:14px;color:var(--muted);background:var(--panel);border-radius:8px;padding:12px 14px;max-width:80ch}
+.how b{color:var(--ink);font-weight:600}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+svg text{font-family:var(--mono);fill:var(--muted)}
+@media (max-width:720px){.flow{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.flow{grid-template-columns:1fr}}
+@page{size:A4 landscape;margin:11mm 13mm}
+@media print{
+  html,body{background:#fff}
+  body{padding:0;font-size:13.5px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{gap:0;max-width:none}
+  section{break-before:page;gap:10px}
+  section:first-child{break-before:auto}
+  h1{font-size:40px} h2{font-size:24px;max-width:none}
+  .chart,.fig,.tbl{overflow:visible;border:0;padding:0}
+  .chart svg,.fig img,.chart.small svg{min-width:0 !important;width:100%}
+  .chart.small{max-width:62%}
+  .fig img{max-height:118mm;width:auto;max-width:100%;margin:0 auto}
+  table{min-width:0}
+  .take,.how,.lede,.ask{max-width:none}
+  .chart,.tbl,.flow,.answers,.fig,.keys,.approaches,.sc,.how{break-inside:avoid}
+  .scen{gap:8px} .sc{padding:10px 14px;grid-template-columns:96px 1fr} .sc .p{font-size:30px}
+  .approaches{grid-template-columns:repeat(5,minmax(0,1fr))} .ap{padding:10px}
+  .flow{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .answers{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .fig img{max-height:105mm}
+}
+</style>
+</head><body>
+<nav class="hub" style="font:500 13px/1.4 ui-monospace,Menlo,monospace;padding:10px max(16px,env(safe-area-inset-left,0px));background:#f3f4f2;color:#333;border-bottom:1px solid #e2e4e8"><a href="index.html" style="color:#1f5f8b">← All meeting 3 pages</a></nav>
+
+
+<div class="wrap">
+
+<section>
+  <div class="q">Geopolitical tracking · monthly, 2018 → 2026</div>
+  <h1>Can we trust the monthly tracker?</h1>
+  <p class="lede">Every month the system turns the world's news into a short list of developments that matter for markets, how each one moved, and how governments reacted. These five checks test whether that picture is right.</p>
+  <div class="answers">
+    <div class="ans"><span class="pill good">yes</span><div><div class="k">Right news kept?</div><div class="v">About 4 in 5, twice as well as keywords</div></div></div>
+    <div class="ans"><span class="pill good">yes</span><div><div class="k">Follows real conflict risk?</div><div class="v">Moves with the Geopolitical Risk index</div></div></div>
+    <div class="ans"><span class="pill mid">partly</span><div><div class="k">AI better than counting?</div><div class="v">Not for the monthly total, yes for the detail</div></div></div>
+    <div class="ans"><span class="pill good">yes</span><div><div class="k">No peeking at the future?</div><div class="v">Later Wikipedia edits change little</div></div></div>
+    <div class="ans"><span class="pill good">yes</span><div><div class="k">Government reactions line up?</div><div class="v">US trade actions follow trade uncertainty</div></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="q">What the tracker does each month</div>
+  <h2>Four steps turn 500 daily news lines into ten storylines</h2>
+  <div class="flow">
+    <div class="st"><span class="n">1</span><b>Collect</b><span>Every daily entry on Wikipedia's Current Events page, about 54,000 since 2018.</span><i>Feb 2022: 543 events</i></div>
+    <div class="st"><span class="n">2</span><b>Filter</b><span>Codex (an AI model) scores each event 0–3 for market relevance and keeps 2–3.</span><i>Invasion of Ukraine: 3</i></div>
+    <div class="st"><span class="n">3</span><b>Group and follow</b><span>Related events become one storyline with the same ID every month, labelled escalating, steady or easing.</span><i>259 events → "Russia–Ukraine war", escalating</i></div>
+    <div class="st"><span class="n">4</span><b>Add reactions</b><span>Official actions from the US Federal Register, EU and UK sanctions lists, and the Fed, ECB and BoE.</span><i>518 new EU sanctions listings</i></div>
+  </div>
+</section>
+
+<section>
+  <div class="q">Check 1 · Is Codex giving the right labels?</div>
+  <h2>Codex keeps the right news about 4 times in 5, twice as well as a keyword rule</h2>
+  <div class="chart small"><svg id="c3" viewBox="0 0 480 250" role="img" aria-label="F1 scores: keyword rule 0.40, fine-tuned local model 0.65, Codex 0.79"></svg></div>
+  <p class="take">A cheaper model trained on our own computer reached 0.65, so <b>Codex stays as the filter</b>.</p>
+  <p class="how"><b>How it's measured.</b> 220 news items were labelled "matters for markets" or not by a second AI (Claude). The F1 score combines two things: not missing important news, and not keeping junk. 1.0 is perfect. A human check of these labels is still to come.</p>
+</section>
+
+<section>
+  <div class="q">Check 2 · Does the tracker follow real conflict risk?</div>
+  <h2>The tracker's conflict level rises and falls with an established risk index</h2>
+  <div class="chart">
+    <div class="legend"><span><i style="background:var(--track)"></i>Our tracker: conflict activity</span><span><i style="background:var(--ref)"></i>Geopolitical Risk index (military)</span></div>
+    <svg id="c1" viewBox="0 0 1000 300" role="img" aria-label="Line chart of tracker conflict activity and the Geopolitical Risk index, 2018 to 2026"></svg>
+  </div>
+  <p class="take">Both jump at the <b>Ukraine invasion</b>, the <b>Gaza war</b> and the <b>Iran war</b>, and stay quiet in between.</p>
+  <p class="how"><b>How it's measured.</b> The Geopolitical Risk (GPR) index, from Federal Reserve economists Caldara and Iacoviello, measures how much major newspapers write about war and military threats each month. Our line is the number of conflict events the tracker kept, weighted by relevance. Each line is scaled to its own peak, so compare shapes, not heights.</p>
+</section>
+
+<section>
+  <div class="q">Check 3 · Is the AI worth it over simple counting?</div>
+  <h2>For the monthly total, simple word counting is almost as good; the AI's value is in the detail</h2>
+  <div class="chart">
+    <div class="legend"><span><i class="sq" style="background:var(--track)"></i>Codex tracker</span><span><i class="sq" style="background:var(--kw)"></i>Keyword count ("war", "missile" …)</span><span><i class="sq" style="background:var(--cat)"></i>Wikipedia's "Armed conflicts" count</span><span><i style="background:var(--bad)"></i>Pass mark 0.3</span></div>
+    <svg id="c2" viewBox="0 0 1000 300" role="img" aria-label="Correlation with the risk index by period for Codex, keyword count and category count"></svg>
+  </div>
+  <p class="take">Codex passes in every period from 2018. Keyword counting comes close. What counting <b>cannot</b> give is named storylines, whether each is escalating or easing, and which government reacted.</p>
+  <p class="how"><b>How it's measured.</b> For each period: when the risk index rose from one month to the next, did the method rise too? The score is a rank correlation: 1 means always in step, 0 means unrelated. The pass mark of 0.3 was written down before the test.</p>
+</section>
+
+<section>
+  <div class="q">Check 4 · Is the history test peeking at the future?</div>
+  <h2>Using Wikipedia as it looked the next day changes the result by at most 0.06</h2>
+  <div class="chart small"><svg id="c4" viewBox="0 0 480 250" role="img" aria-label="Scores using today's pages versus next-day pages"></svg></div>
+  <p class="take">People edit Wikipedia after the event. Re-running on the version saved <b>the day after</b> each event gives the same picture, so later edits are not flattering our history.</p>
+  <p class="how"><b>How it's measured.</b> Wikipedia keeps every saved version of every page. We downloaded each day's page as it stood the next day and re-ran the whole tracker. The limit, set in advance, was a change of at most 0.10.</p>
+</section>
+
+<section>
+  <div class="q">Check 5 · Do government reactions line up?</div>
+  <h2>US trade actions rise when trade-policy uncertainty rises</h2>
+  <div class="chart">
+    <div class="legend"><span><i class="sq" style="background:var(--track)"></i>US tariff and trade-investigation actions per month</span><span><i style="background:var(--ref)"></i>Trade Policy Uncertainty index</span></div>
+    <svg id="c5" viewBox="0 0 1000 280" role="img" aria-label="Monthly US trade actions with the trade policy uncertainty index"></svg>
+  </div>
+  <p class="take">The <b>2018–19 US–China trade war</b> and the <b>2025 tariff wave</b> show up in both. Correlation within each period: 0.42.</p>
+  <p class="how"><b>How it's measured.</b> Bars count significant tariff and trade-investigation notices in the US Federal Register, the government's official daily journal (Codex sorts each notice by type). The line is the Trade Policy Uncertainty index (Caldara and colleagues, Federal Reserve), built from newspaper coverage of trade-policy worries.</p>
+</section>
+
+<section>
+  <div class="q">Summary</div>
+  <h2>The tracker gets the picture right; the AI earns its place through detail</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Question</th><th>Result</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Is Codex keeping the right news?</td><td class="num">F1 0.79 · keywords 0.40</td><td><span class="pill good">yes</span></td></tr>
+      <tr><td>Does a storyline keep the same identity month to month?</td><td class="num">95% of 60 pairs</td><td><span class="pill good">yes</span></td></tr>
+      <tr><td>Does conflict activity follow the risk index?</td><td class="num">0.46–0.62 from 2018</td><td><span class="pill good">yes</span></td></tr>
+      <tr><td>Is the AI better than counting for the monthly total?</td><td class="num">only slightly</td><td><span class="pill mid">partly</span></td></tr>
+      <tr><td>Do later Wikipedia edits help?</td><td class="num">change ≤ 0.06</td><td><span class="pill good">no</span></td></tr>
+      <tr><td>Do US trade actions follow trade uncertainty?</td><td class="num">0.42</td><td><span class="pill good">yes</span></td></tr>
+      <tr><td>Are reactions linked to the right storyline?</td><td class="num">27 of 30 checked</td><td><span class="pill good">yes</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="how"><b>Limits.</b> The reference labels in Check 1 come from a second AI, not yet from people. Coverage follows Wikipedia's editors and US and European official sources.</p>
+</section>
+
+</div>
+
+<script>
+const D = {"conflict": {"m": ["2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"], "tracker": [11.0, 8.3, 8.0, 24.3, 3.7, 0.7, 2.7, 0.0, 3.3, 0.0, 7.0, 1.3, 6.0, 5.7, 0.7, 0.7, 5.0, 17.7, 5.7, 10.7, 10.0, 41.0, 0.0, 10.7, 21.0, 36.0, 14.7, 1.0, 3.0, 5.7, 5.0, 6.7, 15.3, 24.7, 10.0, 0.0, 0.0, 2.7, 5.7, 10.3, 28.7, 4.7, 16.3, 36.3, 4.7, 0.0, 7.0, 6.0, 17.0, 171.0, 176.3, 103.3, 59.0, 59.7, 53.0, 45.0, 66.7, 58.7, 20.7, 3.3, 22.0, 7.3, 21.3, 22.0, 22.0, 29.7, 53.3, 58.7, 28.7, 259.0, 107.3, 59.3, 54.7, 47.7, 37.0, 47.0, 103.3, 55.3, 74.3, 187.0, 93.3, 125.7, 71.3, 59.0, 54.0, 40.7, 80.3, 38.3, 35.3, 72.7, 31.7, 42.0, 76.7, 80.3, 55.7, 22.3, 29.3, 51.3, 288.7, 232.3, 164.3, 135.7, 195.0, 84.0, 67.0, 76.0], "gpr": [14.7, 19.2, 16.0, 35.4, 15.3, 10.3, 8.5, 15.1, 11.4, 6.6, 14.7, 18.0, 9.2, 11.0, 14.3, 8.8, 12.9, 17.5, 10.4, 12.4, 16.0, 38.6, 10.2, 11.2, 67.7, 16.6, 11.2, 4.6, 8.6, 6.2, 5.4, 3.8, 8.0, 10.0, 9.9, 6.9, 4.7, 6.0, 9.3, 15.7, 38.3, 11.3, 12.9, 46.5, 16.8, 6.2, 8.8, 16.4, 27.5, 111.0, 235.8, 143.8, 86.5, 77.1, 62.9, 73.2, 68.6, 71.9, 61.9, 68.6, 61.2, 77.6, 55.5, 42.1, 52.1, 45.9, 50.3, 42.5, 44.6, 175.9, 135.3, 104.5, 98.2, 95.0, 67.2, 104.2, 92.2, 64.8, 55.0, 78.9, 83.0, 106.5, 68.9, 59.5, 59.8, 48.5, 57.9, 47.5, 62.5, 118.2, 61.8, 60.9, 64.0, 71.5, 38.1, 60.9, 67.8, 50.3, 220.1, 146.5, 103.6, 99.0, 105.8, 69.9, 88.3, 79.9]}, "trade": {"m": ["2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"], "actions": [2, 0, 2, 3, 2, 3, 2, 4, 1, 1, 1, 1, 1, 0, 1, 1, 5, 1, 2, 2, 1, 3, 1, 3, 3, 1, 0, 1, 2, 3, 1, 2, 1, 3, 2, 2, 9, 1, 7, 0, 0, 6, 2, 0, 2, 1, 2, 2, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 2, 1, 2, 1, 2, 0, 0, 3, 1, 8, 7, 14, 4, 3, 3, 8, 6, 5, 0, 3, 2, 4, 2, 2, 3, 5, 8, 4, 3, 2], "tpu": [73.2, 57.0, 260.6, 174.2, 152.2, 228.6, 246.4, 225.8, 150.1, 155.2, 144.8, 164.6, 141.7, 127.5, 94.1, 91.2, 189.8, 266.0, 145.1, 254.2, 136.9, 139.3, 119.8, 146.3, 139.6, 95.7, 61.2, 55.5, 66.5, 59.9, 57.4, 67.2, 67.8, 70.2, 69.9, 98.0, 75.4, 36.9, 46.8, 48.0, 49.3, 49.3, 57.2, 39.5, 51.5, 56.1, 48.5, 37.1, 46.6, 54.3, 53.6, 41.2, 63.3, 74.5, 67.0, 65.9, 48.5, 46.6, 49.3, 48.8, 52.7, 43.7, 65.4, 33.9, 59.7, 52.3, 63.3, 60.0, 63.6, 44.5, 40.9, 65.3, 69.6, 62.6, 82.2, 91.0, 94.5, 89.1, 101.4, 98.1, 128.6, 147.9, 373.3, 247.7, 360.9, 469.8, 603.1, 1151.4, 723.1, 472.5, 554.9, 575.8, 465.3, 426.2, 342.8, 308.3, 410.8, 384.0, 269.1, 197.3, 200.0, 187.3, 194.9, 210.0, 260.8, 217.9]}};
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent.appendChild(e);return e}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function lineChart(id,months,series,opts){
+  const svg=document.getElementById(id); svg.innerHTML="";
+  const W=1000,H=opts.h||300,L=46,R=14,T=16,B=34, n=months.length;
+  const x=i=>L+(W-L-R)*i/(n-1), y=v=>T+(H-T-B)*(1-v);
+  for(const t of [0,0.5,1]){el("line",{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:css("--rule"),"stroke-width":1},svg)}
+  months.forEach((m,i)=>{if(m.endsWith("-01")){el("line",{x1:x(i),x2:x(i),y1:H-B,y2:H-B+5,stroke:css("--muted")},svg);el("text",{x:x(i),y:H-B+20,"text-anchor":"middle","font-size":13},svg,m.slice(0,4))}});
+  if(opts.bars){const s=opts.bars,mx=Math.max(...s.v),bw=(W-L-R)/n*0.7;s.v.forEach((v,i)=>{const h=(H-T-B)*v/mx;el("rect",{x:x(i)-bw/2,y:H-B-h,width:bw,height:h,fill:css(s.color),opacity:0.9},svg)})}
+  for(const s of series){const mx=Math.max(...s.v);const d=s.v.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v/mx).toFixed(1)).join(" ");el("path",{d,fill:"none",stroke:css(s.color),"stroke-width":s.w||2,"stroke-linejoin":"round"},svg)}
+  for(const a of (opts.notes||[])){const i=months.indexOf(a.m);if(i<0)continue;el("line",{x1:x(i),x2:x(i),y1:T+6,y2:H-B,stroke:css("--muted"),"stroke-dasharray":"3 4","stroke-width":1},svg);el("text",{x:x(i)+(a.left?-6:6),y:T+16,"text-anchor":a.left?"end":"start","font-size":13,style:"fill:var(--ink)"},svg,a.t)}
+  el("line",{x1:L,x2:W-R,y1:H-B,y2:H-B,stroke:css("--muted")},svg);
+}
+function barChart(id,groups,keys,colors,opts){
+  const svg=document.getElementById(id); svg.innerHTML="";
+  const [W,H]=svg.getAttribute("viewBox").split(" ").slice(2).map(Number);
+  const L=40,R=10,T=24,B=42,max=opts.max||1;
+  const y=v=>T+(H-T-B)*(1-v/max);
+  for(const t of opts.ticks){el("line",{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:css("--rule")},svg);el("text",{x:L-6,y:y(t)+4,"text-anchor":"end","font-size":12},svg,t.toFixed(1))}
+  const gw=(W-L-R)/groups.length, bw=Math.min(56,gw*0.8/keys.length);
+  groups.forEach((g,gi)=>{const cx=L+gw*gi+gw/2;keys.forEach((k,ki)=>{const v=g[k];const bx=cx-(keys.length*bw)/2+ki*bw;const yy=y(Math.max(v,0));
+    el("rect",{x:bx+2,y:yy,width:bw-4,height:Math.max(1,y(0)-yy),fill:css((g.colors||colors)[ki]),rx:2},svg);
+    el("text",{x:bx+bw/2,y:yy-6,"text-anchor":"middle","font-size":13,style:"fill:var(--ink)"},svg,v.toFixed(2))});
+    el("text",{x:cx,y:H-B+19,"text-anchor":"middle","font-size":13.5,style:"fill:var(--ink)"},svg,g.label);
+    if(g.sub)el("text",{x:cx,y:H-B+35,"text-anchor":"middle","font-size":11.5},svg,g.sub)});
+  if(opts.line!=null){el("line",{x1:L,x2:W-R,y1:y(opts.line),y2:y(opts.line),stroke:css("--bad"),"stroke-width":1.6,"stroke-dasharray":"6 4"},svg)}
+  if(opts.caption)el("text",{x:W-R,y:13,"text-anchor":"end","font-size":12},svg,opts.caption);
+  el("line",{x1:L,x2:W-R,y1:y(0),y2:y(0),stroke:css("--muted")},svg);
+}
+lineChart("c1",D.conflict.m,[{v:D.conflict.gpr,color:"--ref",w:2},{v:D.conflict.tracker,color:"--track",w:2.4}],
+  {notes:[{m:"2022-02",t:"Ukraine invasion"},{m:"2023-10",t:"Gaza war"},{m:"2026-03",t:"Iran war",left:true}]});
+barChart("c2",[
+  {label:"2017",sub:"fails",codex:0.26,kw:0.40,cat:0.21},
+  {label:"2018–19",codex:0.55,kw:0.53,cat:0.37},
+  {label:"2020–22",codex:0.59,kw:0.60,cat:0.58},
+  {label:"2022–24",codex:0.46,kw:0.24,cat:0.10},
+  {label:"2025–26",codex:0.62,kw:0.44,cat:0.44}],
+  ["codex","kw","cat"],["--track","--kw","--cat"],{max:0.8,ticks:[0,0.2,0.4,0.6,0.8],line:0.3});
+barChart("c3",[{label:"Keyword rule",v:0.40,colors:["--kw"]},{label:"Local model",v:0.65,colors:["--cat"]},{label:"Codex",v:0.79}],
+  ["v"],["--track"],{max:1,ticks:[0,0.5,1]});
+barChart("c4",[{label:"2018–19",cur:0.55,asof:0.61},{label:"2020–22",cur:0.59,asof:0.55}],["cur","asof"],["--ref","--track"],
+  {max:0.8,ticks:[0,0.4,0.8],caption:"grey = today's pages · teal = next-day pages"});
+lineChart("c5",D.trade.m,[{v:D.trade.tpu,color:"--ref",w:2}],{h:280,bars:{v:D.trade.actions,color:"--track"},
+  notes:[{m:"2018-07",t:"US–China tariffs"},{m:"2025-04",t:"2025 tariff wave",left:true}]});
+</script>
+
+</body></html>

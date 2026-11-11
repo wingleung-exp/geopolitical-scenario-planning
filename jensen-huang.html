@@ -1,0 +1,172 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Jensen Huang Question</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one idea per "screen". Eyebrow = the question, headline = the answer (assertion-evidence), one figure, one takeaway.
+   Single light theme on purpose: screen-shared and printed to PDF, so it must look identical everywhere. */
+:root{
+  color-scheme: light;
+  --bg:#ffffff; --panel:#f6f7f8; --ink:#141922; --muted:#5a616c; --rule:#e2e4e8;
+  --accent:#1f5f8b; --esc:#c0392b; --sq:#8b929c; --ease:#1a9b6c;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 64px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:64px}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance}
+h1{font-size:clamp(36px,5.4vw,56px);line-height:1.04}
+h2{font-size:clamp(24px,3.2vw,32px);line-height:1.15;max-width:32ch}
+h3{font-size:19px;line-height:1.25}
+p{margin:0;max-width:70ch}
+.q{font-family:var(--mono);font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:500}
+section{display:flex;flex-direction:column;gap:16px}
+.lede{font-size:20px;line-height:1.45;max-width:58ch}
+.ask{border-left:4px solid var(--accent);padding:4px 0 4px 16px;font-size:19px;max-width:62ch}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:6px}
+.key{border:1px solid var(--rule);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.key .big{font-family:var(--display);font-weight:600;font-size:34px;line-height:1}
+.key .lbl{font-size:15px}
+.key .sub{font-size:13.5px;color:var(--muted)}
+.scen{display:grid;gap:12px}
+.sc{display:grid;grid-template-columns:96px 1fr;gap:18px;border:1px solid var(--rule);border-radius:10px;padding:16px 18px;break-inside:avoid}
+.sc .p{font-family:var(--display);font-weight:600;font-size:40px;line-height:1}
+.sc .bar{height:8px;border-radius:4px;background:var(--panel);margin-top:10px;overflow:hidden}
+.sc .bar i{display:block;height:100%;border-radius:4px}
+.sc .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;margin-top:8px}
+.sc .body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.sc ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--muted)}
+.sc li{margin:2px 0}
+.sc .watch{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.esc .p,.esc .tag{color:var(--esc)} .esc .bar i{background:var(--esc)}
+.sq .p,.sq .tag{color:var(--sq)} .sq .bar i{background:var(--sq)}
+.ease .p,.ease .tag{color:var(--ease)} .ease .bar i{background:var(--ease)}
+.approaches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.ap{border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;border-top:5px solid}
+.ap b{font-family:var(--display);font-size:17px}
+.ap span{font-size:13.5px;color:var(--muted)}
+figure{margin:0}
+.fig{border:1px solid var(--rule);border-radius:10px;padding:10px;overflow-x:auto}
+.fig img{display:block;width:100%;height:auto;min-width:560px}
+.take{font-size:17px;max-width:70ch}
+.take b{font-weight:600}
+.how{font-size:14px;color:var(--muted);background:var(--panel);border-radius:8px;padding:12px 14px;max-width:80ch}
+.how b{color:var(--ink);font-weight:600}
+.sum{display:grid;gap:10px}
+.sum div{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:17px;max-width:76ch}
+.sum div span{font-family:var(--display);font-weight:600;color:var(--accent);font-size:20px;line-height:1.3}
+@media (max-width:820px){.approaches{grid-template-columns:1fr 1fr}.sc{grid-template-columns:1fr}}
+@page{size:A4 landscape;margin:11mm 13mm}
+@media print{
+  html,body{background:#fff}
+  body{padding:0;font-size:13.5px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{gap:0;max-width:none}
+  section{break-before:page;gap:10px}
+  section:first-child{break-before:auto}
+  h1{font-size:40px} h2{font-size:24px;max-width:none}
+  .chart,.fig,.tbl{overflow:visible;border:0;padding:0}
+  .chart svg,.fig img,.chart.small svg{min-width:0 !important;width:100%}
+  .chart.small{max-width:62%}
+  .fig img{max-height:118mm;width:auto;max-width:100%;margin:0 auto}
+  table{min-width:0}
+  .take,.how,.lede,.ask{max-width:none}
+  .chart,.tbl,.flow,.answers,.fig,.keys,.approaches,.sc,.how{break-inside:avoid}
+  .scen{gap:8px} .sc{padding:10px 14px;grid-template-columns:96px 1fr} .sc .p{font-size:30px}
+  .approaches{grid-template-columns:repeat(5,minmax(0,1fr))} .ap{padding:10px}
+  .flow{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .answers{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .fig img{max-height:105mm}
+}
+</style>
+</head><body>
+<nav class="hub" style="font:500 13px/1.4 ui-monospace,Menlo,monospace;padding:10px max(16px,env(safe-area-inset-left,0px));background:#f3f4f2;color:#333;border-bottom:1px solid #e2e4e8"><a href="index.html" style="color:#1f5f8b">← All meeting 3 pages</a></nav>
+
+
+<div class="wrap">
+
+<section>
+  <div class="q">Scenario question · frozen 11 November 2026</div>
+  <h1>The Jensen Huang question</h1>
+  <p class="ask">NVIDIA has opened an investigation into its CEO after US intelligence reported that a close associate was a Chinese spy, and Democrats have just won both chambers of Congress. <b>How could US–China AI competition play out over the next 90 days?</b></p>
+  <div class="keys">
+    <div class="key"><div class="big" style="color:var(--esc)">35%</div><div class="lbl">Most likely: targeted new restrictions while trade talks continue</div><div class="sub">Database-grounded agent, one of four scenarios</div></div>
+    <div class="key"><div class="big" style="color:var(--esc)">60–75%</div><div class="lbl">All five approaches lean towards new restrictions</div><div class="sub">US, China or both</div></div>
+    <div class="key"><div class="big" style="color:var(--muted)">20%</div><div class="lbl">How often recent US–China shocks actually escalated within 30 days</div><div class="sub">The approaches expected 45–58%, so read the 60–75% with caution</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="q">What the agent expects over the next 90 days</div>
+  <h2>Most likely: narrowly targeted restrictions while the trade truce holds</h2>
+  <div class="scen">
+    <div class="sc esc"><div><div class="p">35%</div><div class="bar"><i style="width:35%"></i></div><div class="tag">New restrictions · narrow</div></div>
+      <div class="body"><h3>Targeted security tightening alongside negotiations</h3><p>Washington or Beijing adds restrictions aimed at named firms, people or transactions, while wider trade talks and supply arrangements continue.</p>
+      <div class="watch">Watch for</div><ul><li>Officials discussing entity listings or transaction-specific licences</li><li>Congress requesting briefings or hearings on NVIDIA and technology security</li><li>China extending its export-control pause while criticising US measures</li></ul></div></div>
+    <div class="sc esc"><div><div class="p">30%</div><div class="bar"><i style="width:30%"></i></div><div class="tag">New restrictions · broad</div></div>
+      <div class="body"><h3>Broad technology restrictions override the trade pause</h3><p>The espionage case triggers sector-wide limits on AI chips, computing or critical inputs. China retaliates or lets its suspended export controls return.</p>
+      <div class="watch">Watch for</div><ul><li>US reviews covering whole chip classes, AI computing services or chip-making equipment</li><li>China signalling that its pause on rare-earth controls will lapse on 10 January</li><li>Official findings linking the espionage to sensitive technology</li></ul></div></div>
+    <div class="sc ease"><div><div class="p">20%</div><div class="bar"><i style="width:20%"></i></div><div class="tag">Easing</div></div>
+      <div class="body"><h3>Negotiated relief contains the dispute</h3><p>Both governments wall off the investigation and keep easing, for example by extending China's export-control pause beyond 10 January.</p>
+      <div class="watch">Watch for</div><ul><li>Reciprocal technology-licence or critical-input concessions</li><li>China signalling another extension</li><li>US officials separating the company investigation from technology policy</li></ul></div></div>
+    <div class="sc sq"><div><div class="p">15%</div><div class="bar"><i style="width:15%"></i></div><div class="tag">No binding change</div></div>
+      <div class="body"><h3>Competitive stalemate</h3><p>Investigations, hearings and rhetoric dominate, but neither government changes binding technology rules.</p>
+      <div class="watch">Watch for</div><ul><li>The NVIDIA investigation stays unresolved or ends in internal governance changes</li><li>Congressional hearings without new laws</li><li>Statements that restate existing licensing policy</li></ul></div></div>
+  </div>
+  <p class="how"><b>How these were produced.</b> Codex (an AI model) was given the event plus our tracking database: current US–China storylines, recent US government actions, and five similar past episodes with what followed each. Each scenario carries an exact test, so after 7 February 2027 it can be scored as happened or not. The scenarios were frozen with a digital fingerprint (sha256) on 11 November.</p>
+</section>
+
+<section>
+  <div class="q">Do different approaches agree?</div>
+  <h2>Five ways of asking the same model all lean towards new restrictions</h2>
+  <div class="approaches">
+    <div class="ap" style="border-color:#2a78d6;background:#2a78d60f"><b>Plain prompt</b><span>The event and the question only</span></div>
+    <div class="ap" style="border-color:#eb6834;background:#eb68340f"><b>Recalled examples</b><span>The model first recalls similar past cases from memory</span></div>
+    <div class="ap" style="border-color:#1baf7a;background:#1baf7a0f"><b>Our database</b><span>Five similar past episodes from our tracker, and what followed</span></div>
+    <div class="ap" style="border-color:#eda100;background:#eda1000f"><b>Random database cases</b><span>Five random past US–China episodes, as a control</span></div>
+    <div class="ap" style="border-color:#6250d6;background:#6250d60f"><b>Stakeholder agents</b><span>Five agents (White House, Congress, Beijing, industry, allies) debate first</span></div>
+  </div>
+  <figure class="fig"><img src="figs/live.png" alt="Stacked bars per approach: new restrictions 60 to 75 percent, no binding change 15 to 35 percent, easing 0 to 20 percent"></figure>
+  <p class="take">Every approach puts <b>60–75%</b> on new restrictions from the US, China or both. They disagree mainly on whether easing is possible at all.</p>
+</section>
+
+<section>
+  <div class="q">Can we test this on past events?</div>
+  <h2>Only on events after May 2026: before that, the model already knows what happened</h2>
+  <figure class="fig"><img src="figs/cutoff.png" alt="The model dates hidden-date news correctly 60 to 100 percent of the time until May 2026, then 20 percent in June and 0 percent from July"></figure>
+  <p class="take">We hid the dates on news items and asked the model when each happened. It knows events up to <b>May 2026</b>. Hiding company names did not help: it still recognised 14 of 16 past US–China cases. So a fair test uses <b>only events from June 2026 onward</b>.</p>
+  <p class="how"><b>Also fixed.</b> The model's tool could search the live web by default, which would let it look up outcomes. Web access is now switched off for every run.</p>
+</section>
+
+<section>
+  <div class="q">Which approach writes the best scenarios?</div>
+  <h2>On new events, adding our database neither helps nor hurts; the stakeholder agents do worst</h2>
+  <figure class="fig"><img src="figs/brier.png" alt="Brier scores. 29 storylines: plain 0.68, recalled 0.72, database 0.66, random 0.65, stakeholder agents 0.79. 7 US–China events: 0.71, 0.75, 0.80, 0.68, 0.70. Even guess 0.75"></figure>
+  <p class="take">Across 29 major storylines, the single-agent approaches score about <b>0.65–0.68</b>, a bit better than an even guess (0.75). The <b>stakeholder agents score 0.79</b>, clearly worse. On the 7 US–China events, no approach is clearly better than an even guess yet.</p>
+  <p class="how"><b>How it's measured.</b> Each approach wrote four scenarios with probabilities for events from June to September 2026. A separate AI judge read what actually happened in the next 30 days and picked the scenario that came true. The <b>Brier score</b> is 0 when all the probability was on what happened, and 0.75 when it was spread evenly at 25% each. Lower is better. Whiskers show the 95% range.</p>
+</section>
+
+<section>
+  <div class="q">Where do the scenarios go wrong?</div>
+  <h2>After US–China shocks, every approach expects too much escalation; elsewhere the balance is about right</h2>
+  <figure class="fig"><img src="figs/bias.png" alt="Probability put on escalation by approach compared with how often escalation actually happened"></figure>
+  <p class="take">After the 7 US–China shocks, escalation followed in only <b>20%</b> of cases. In the rest, nothing binding changed within 30 days. Yet every approach put <b>45–58%</b> on escalation. Across the 29 broader storylines, many of them active wars, escalation followed 44% of the time and the approaches put 34–44% on it, which is about right. <b>The over-reaction is specific to US–China policy shocks, the very type of the Jensen Huang question.</b></p>
+  <p class="how"><b>How it's measured.</b> Each scenario was tagged as escalation, no change, or easing. The bars show the average probability each approach gave to escalation. The red line shows how often the scenario the judge picked was an escalation.</p>
+</section>
+
+<section>
+  <div class="q">Summary</div>
+  <h2>A useful structure for thinking, but on US–China shocks the probabilities lean too dramatic</h2>
+  <div class="sum">
+    <div><span>1</span><p>For the Jensen Huang question, the agent's most likely outcome is <b>targeted restrictions while trade talks continue</b>, with specific signs to watch for each scenario.</p></div>
+    <div><span>2</span><p>A single AI call, with or without our database, does slightly better than an even guess on genuinely new events. <b>Stakeholder agents made it worse.</b></p></div>
+    <div><span>3</span><p>After US–China shocks, all approaches <b>over-predicted escalation</b> (about 50% expected against 20% observed), so the Jensen Huang tilt towards new restrictions is probably too strong.</p></div>
+    <div><span>4</span><p>The Jensen Huang scenarios are frozen and will be <b>scored after 7 February 2027</b>.</p></div>
+  </div>
+</section>
+
+</div>
+
+</body></html>
